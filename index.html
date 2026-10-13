@@ -1,1 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVs Online — Tu currículum, siempre a mano</title>
+<meta name="description" content="Creá tu currículum online en minutos, compartilo con un enlace propio e imprimilo cuando lo necesites.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231F3A5F'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23E8A33D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F7FA;
+    --surface: #FFFFFF;
+    --surface-2: #FBFCFD;
+    --text: #1B2331;
+    --text-muted: #5B6472;
+    --primary: #1F3A5F;
+    --primary-light: #2C4F7C;
+    --accent: #E8A33D;
+    --accent-dark: #C9862A;
+    --border: #E3E7EE;
+    --shadow: 0 4px 20px rgba(31, 58, 95, 0.08);
+    --shadow-lg: 0 20px 60px rgba(31, 58, 95, 0.16);
+    color-scheme: light;
+  }
+
+  [data-tema="oscuro"] {
+    --bg: #0F1826;
+    --surface: #172236;
+    --surface-2: #1D2A40;
+    --text: #ECF1F7;
+    --text-muted: #93A0B4;
+    --primary: #4E7AB0;
+    --primary-light: #6A93C4;
+    --accent: #F0B15A;
+    --accent-dark: #E8A33D;
+    --border: #2A3850;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.35s ease, color 0.35s ease;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .contenedor {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ============ HEADER ============ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .barra-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-marca {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    position: relative;
+    flex-shrink: 0;
+  }
+  .logo-marca::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  nav.nav-desktop {
+    display: flex;
+    gap: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  nav.nav-desktop a:hover { color: var(--text); }
+
+  .btn-hamburguesa {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0;
+  }
+  .btn-hamburguesa span {
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    margin: 0 auto;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .btn-hamburguesa.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .btn-hamburguesa.abierto span:nth-child(2) { opacity: 0; }
+  .btn-hamburguesa.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-movil {
+    display: none;
+    flex-direction: column;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .nav-movil.abierto { display: flex; max-height: 320px; }
+  .nav-movil a {
+    padding: 15px 24px;
+    font-size: 14.5px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .nav-movil a:last-child { border-bottom: none; }
+  .nav-movil-login { color: var(--primary) !important; font-weight: 600 !important; }
+  [data-tema="oscuro"] .nav-movil-login { color: var(--accent) !important; }
+
+  .acciones-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn-primario {
+    background: var(--primary);
+    color: #fff;
+  }
+  .btn-primario:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+  .btn-dorado {
+    background: var(--accent);
+    color: #2B2100;
+  }
+  .btn-dorado:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+  .btn-fantasma {
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-fantasma:hover { border-color: var(--primary); }
+
+  .btn-grande { padding: 14px 26px; font-size: 15px; border-radius: 10px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 84px 24px 100px;
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-size: 42px;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--primary);
+    position: relative;
+  }
+  [data-tema="oscuro"] .hero h1 em { color: var(--accent); }
+
+  .hero p.lead {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 460px;
+    margin-bottom: 32px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-confianza {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .contador-confianza {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+  }
+  [data-tema="oscuro"] .contador-confianza { color: var(--accent); }
+
+  /* --- Mini tarjeta CV (elemento distintivo) --- */
+  .escena-cv {
+    position: relative;
+    height: 460px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .escena-cv-interior {
+    position: relative;
+    width: 340px;
+    height: 420px;
+    transition: transform 0.2s ease;
+  }
+
+  .tarjeta-cv-fondo {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 300px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    height: 380px;
+    transform: rotate(4deg);
+    box-shadow: var(--shadow);
+  }
+
+  .tarjeta-cv {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 320px;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: flex;
+    transform: rotate(-2deg);
+    animation: flotar 6s ease-in-out infinite;
+    border: 1px solid var(--border);
+  }
+
+  @keyframes flotar {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(-2deg) translateY(-10px); }
+  }
+
+  .tarjeta-cv-lateral {
+    width: 92px;
+    background: linear-gradient(160deg, var(--primary), var(--primary-light));
+    padding: 20px 12px;
+    flex-shrink: 0;
+  }
+  .tarjeta-cv-foto {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid var(--accent);
+    margin-bottom: 14px;
+  }
+  .tarjeta-cv-linea {
+    height: 6px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .tarjeta-cv-chip {
+    height: 16px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 5px;
+    margin-bottom: 6px;
+  }
+
+  .tarjeta-cv-cuerpo { padding: 22px 18px; flex: 1; }
+  .tcv-nombre {
+    height: 14px; width: 70%;
+    background: var(--text);
+    opacity: 0.85;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .tcv-puesto {
+    height: 8px; width: 50%;
+    background: var(--accent);
+    border-radius: 3px;
+    margin-bottom: 18px;
+  }
+  .tcv-parrafo { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 7px; }
+  .tcv-parrafo:nth-child(4) { width: 92%; }
+  .tcv-parrafo:nth-child(5) { width: 78%; }
+  .tcv-seccion {
+    height: 8px; width: 40%;
+    background: var(--primary);
+    opacity: 0.5;
+    border-radius: 3px;
+    margin: 16px 0 10px;
+  }
+
+  .insignia-flotante {
+    position: absolute;
+    bottom: 18px;
+    left: -14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    animation: flotar 6s ease-in-out infinite reverse;
+  }
+  .insignia-punto {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #3FB27F;
+  }
+
+  /* ============ SECCIONES GENERALES ============ */
+  section { padding: 90px 24px; }
+  .encabezado-seccion {
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 56px;
+  }
+  .encabezado-seccion h2 { font-size: 30px; margin-bottom: 12px; }
+  .encabezado-seccion p { color: var(--text-muted); font-size: 15px; }
+
+  /* ============ CARACTERÍSTICAS ============ */
+  .grilla-features {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .tarjeta-feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tarjeta-feature:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .icono-feature {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    color: var(--primary);
+  }
+  [data-tema="oscuro"] .icono-feature { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+  .tarjeta-feature h3 { font-size: 16px; margin-bottom: 6px; }
+  .tarjeta-feature p { font-size: 13.5px; color: var(--text-muted); }
+
+  /* ============ CÓMO FUNCIONA ============ */
+  .como-funciona {
+    background: var(--surface-2);
+  }
+  .franja-pasos {
+    max-width: 780px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    text-align: center;
+  }
+  .paso-mini { padding: 6px; }
+  .paso-mini .num {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+  }
+  .paso-mini h4 { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+  .paso-mini p { font-size: 12.5px; color: var(--text-muted); }
+
+  .cta-modal-wrap { text-align: center; margin-top: 40px; }
+
+  /* ============ PRECIOS ============ */
+  .grilla-precios {
+    max-width: 780px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .tarjeta-precio {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    position: relative;
+  }
+  .tarjeta-precio.destacada {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-lg);
+  }
+  .etiqueta-recomendado {
+    position: absolute;
+    top: -12px; right: 24px;
+    background: var(--accent);
+    color: #2B2100;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .tarjeta-precio h3 { font-size: 15px; color: var(--text-muted); font-weight: 600; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .precio-monto { font-family: 'Fraunces', serif; font-size: 38px; margin-bottom: 4px; }
+  .precio-monto span { font-size: 14px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 500; }
+  .precio-ahorro { font-size: 12.5px; color: #3FB27F; font-weight: 600; margin-bottom: 22px; }
+  .precio-neutro { color: var(--text-muted); font-weight: 500; margin-bottom: 22px; }
+  .precio-equivalente { font-size: 12.5px; color: var(--text-muted); margin-bottom: 4px; }
+  .lista-precio { list-style: none; margin: 22px 0 26px; }
+  .lista-precio li {
+    font-size: 13.5px;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .lista-precio li:last-child { border-bottom: none; }
+  .check-precio {
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+  [data-tema="oscuro"] .check-precio { color: var(--accent); }
+  .tarjeta-precio .btn { width: 100%; }
+
+  /* ============ OPINIONES ============ */
+  .grilla-opiniones {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .tarjeta-opinion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .estrellas { color: var(--accent); font-size: 13px; margin-bottom: 12px; letter-spacing: 2px; }
+  .tarjeta-opinion p.cita { font-size: 13.5px; color: var(--text); margin-bottom: 18px; line-height: 1.65; }
+  .autor-opinion { display: flex; align-items: center; gap: 10px; }
+  .avatar-opinion {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .autor-opinion .nombre { font-size: 13px; font-weight: 600; }
+  .autor-opinion .rol { font-size: 11.5px; color: var(--text-muted); }
+
+  /* ============ FAQ ============ */
+  .lista-faq { max-width: 720px; margin: 0 auto; }
+  .item-faq {
+    border-bottom: 1px solid var(--border);
+  }
+  .pregunta-faq {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 20px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .pregunta-faq .signo {
+    font-size: 20px;
+    color: var(--accent-dark);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
+  .item-faq.abierto .signo { transform: rotate(45deg); }
+  .respuesta-faq {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    padding: 0 4px;
+  }
+  .item-faq.abierto .respuesta-faq {
+    max-height: 200px;
+    padding: 0 4px 20px;
+  }
+
+  /* ============ CTA FINAL ============ */
+  .cta-final {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 24px;
+    padding: 56px 40px;
+    text-align: center;
+    color: #fff;
+  }
+  .cta-final h2 { color: #fff; font-size: 28px; margin-bottom: 12px; }
+  .cta-final p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 28px; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+  }
+  .footer-interior {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .footer-links { display: flex; gap: 22px; }
+
+  /* ============ BOTONES FLOTANTES ============ */
+  .flotante {
+    position: fixed;
+    bottom: 26px;
+    z-index: 200;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+  }
+  .flotante:hover { transform: translateY(-2px); }
+
+  #btnSubir {
+    left: 26px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+  }
+  #btnSubir.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  #btnTema { right: 26px; }
+
+  /* ============ MODAL ============ */
+  .fondo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 24, 38, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .fondo-modal.abierto { display: flex; }
+
+  .caja-modal {
+    background: var(--surface);
+    border-radius: 20px;
+    max-width: 560px;
+    width: 100%;
+    padding: 36px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+
+  .cerrar-modal {
+    position: absolute;
+    top: 18px; right: 18px;
+    background: var(--surface-2);
+    border: none;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .caja-modal h3 { font-size: 22px; margin-bottom: 6px; }
+  .caja-modal > p.sub { color: var(--text-muted); font-size: 13.5px; margin-bottom: 28px; }
+
+  .paso-detalle {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .paso-detalle:last-child { border-bottom: none; }
+  .paso-detalle .circulo-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .paso-detalle h4 { font-size: 14.5px; margin-bottom: 4px; }
+  .paso-detalle p { font-size: 13px; color: var(--text-muted); }
+
+  .modal-cta { margin-top: 26px; text-align: center; }
+  .modal-cta .btn { width: 100%; }
+
+  /* ============ TRANSICIÓN AL EDITOR / DASHBOARD ============ */
+  .capa-transicion {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: var(--bg);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .capa-transicion.visible {
+    display: flex;
+    opacity: 1;
+  }
+  .panel-app-spinner {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    animation: girar 0.8s linear infinite;
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  /* ============ RESPONSIVE ============ */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 50px; gap: 50px; }
+    .hero h1 { font-size: 34px; }
+    .escena-cv { height: 320px; max-width: 100%; margin: 0 auto; overflow: hidden; }
+    .escena-cv-interior { transform: scale(0.82); }
+    .grilla-features { grid-template-columns: repeat(2, 1fr); }
+    .grilla-opiniones { grid-template-columns: 1fr; }
+    nav.nav-desktop { display: none; }
+    .nav-desktop-btn { display: none; }
+    .btn-hamburguesa { display: flex; }
+  }
+
+  @media (max-width: 640px) {
+    section { padding: 60px 20px; }
+    .hero { padding: 40px 20px 60px; }
+    .hero h1 { font-size: 28px; }
+    .hero-ctas .btn { width: 100%; }
+    .hero-ctas { flex-direction: column; }
+    .grilla-features { grid-template-columns: 1fr; }
+    .franja-pasos { grid-template-columns: 1fr 1fr; row-gap: 26px; }
+    .grilla-precios { grid-template-columns: 1fr; }
+    .encabezado-seccion h2 { font-size: 24px; }
+    .cta-final { padding: 40px 24px; }
+    .cta-final h2 { font-size: 22px; }
+    .footer-interior { flex-direction: column; text-align: center; }
+    .escena-cv { height: 260px; }
+    .escena-cv-interior { transform: scale(0.68); }
+    .flotante { width: 44px; height: 44px; }
+    #btnSubir { left: 16px; bottom: 18px; }
+    #btnTema { right: 16px; bottom: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="barra-header">
+    <div class="logo">
+      <span class="logo-marca"></span>
+      CVs Online
+    </div>
+    <nav class="nav-desktop">
+      <a href="#caracteristicas">Características</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#precios">Precios</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+    <div class="acciones-header">
+      <button class="btn btn-fantasma nav-desktop-btn" style="padding:10px 16px;" onclick="abrirApp('editor')">Iniciar sesión</button>
+      <button class="btn btn-dorado" onclick="abrirApp('editor')">Crear mi CV</button>
+      <button class="btn-hamburguesa" id="btnHamburguesa" onclick="alternarMenuMovil()" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav-movil" id="navMovil">
+    <a href="#caracteristicas" onclick="cerrarMenuMovil()">Características</a>
+    <a href="#como-funciona" onclick="cerrarMenuMovil()">Cómo funciona</a>
+    <a href="#precios" onclick="cerrarMenuMovil()">Precios</a>
+    <a href="#faq" onclick="cerrarMenuMovil()">Preguntas</a>
+    <a href="#" onclick="cerrarMenuMovil(); abrirApp('editor');" class="nav-movil-login">Iniciar sesión</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <span class="eyebrow">Hecho para buscar trabajo hoy</span>
+    <h1>Tu currículum, <em>siempre</em> listo para compartir</h1>
+    <p class="lead">Completá tus datos una vez, elegí un diseño prolijo y tené un enlace propio para compartir online o imprimir cuando lo necesites.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primario btn-grande" onclick="abrirApp('editor')">Crear mi CV ahora</button>
+      <button class="btn btn-fantasma btn-grande" onclick="abrirModal()">Ver cómo funciona</button>
+    </div>
+    <div class="hero-confianza">
+      <span class="contador-confianza">+248</span>
+      <span>personas ya armaron su CV esta semana</span>
+    </div>
+  </div>
+
+  <div class="escena-cv">
+    <div class="escena-cv-interior">
+      <div class="tarjeta-cv-fondo"></div>
+      <div class="tarjeta-cv">
+        <div class="tarjeta-cv-lateral">
+          <div class="tarjeta-cv-foto"></div>
+          <div class="tarjeta-cv-linea" style="width:70%"></div>
+          <div class="tarjeta-cv-linea" style="width:50%"></div>
+          <div class="tarjeta-cv-chip" style="margin-top:16px;"></div>
+          <div class="tarjeta-cv-chip" style="width:80%"></div>
+          <div class="tarjeta-cv-chip" style="width:60%"></div>
+        </div>
+        <div class="tarjeta-cv-cuerpo">
+          <div class="tcv-nombre"></div>
+          <div class="tcv-puesto"></div>
+          <div class="tcv-seccion" style="margin-top:4px;"></div>
+          <div class="tcv-parrafo"></div>
+          <div class="tcv-parrafo"></div>
+          <div class="tcv-parrafo"></div>
+          <div class="tcv-seccion"></div>
+          <div class="tcv-parrafo"></div>
+          <div class="tcv-parrafo"></div>
+        </div>
+      </div>
+      <div class="insignia-flotante">
+        <span class="insignia-punto"></span>
+        Listo para imprimir
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="caracteristicas">
+  <div class="encabezado-seccion">
+    <h2>Todo lo que necesitás, nada de más</h2>
+    <p>Un editor simple y un resultado que se ve profesional, sin plantillas recargadas ni pasos innecesarios.</p>
+  </div>
+  <div class="grilla-features">
+    <div class="tarjeta-feature">
+      <div class="icono-feature">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
+      <h3>Editá cuando quieras</h3>
+      <p>Volvé a tu CV las veces que necesites y actualizalo en minutos, sin perder lo que ya cargaste.</p>
+    </div>
+    <div class="tarjeta-feature">
+      <div class="icono-feature">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/></svg>
+      </div>
+      <h3>Foto desde tu celular</h3>
+      <p>Subí tu foto de perfil directo desde la galería del teléfono o desde tu PC, sin pasos extra.</p>
+    </div>
+    <div class="tarjeta-feature">
+      <div class="icono-feature">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <h3>Enlace propio</h3>
+      <p>Un enlace único para compartir por WhatsApp, email o donde postules, siempre actualizado.</p>
+    </div>
+    <div class="tarjeta-feature">
+      <div class="icono-feature">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </div>
+      <h3>Impresión lista</h3>
+      <p>Un botón para imprimir o guardar como PDF, con un diseño pensado para verse bien en papel.</p>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="como-funciona">
+  <div class="encabezado-seccion">
+    <h2>Cuatro pasos, nada más</h2>
+    <p>Desde iniciar sesión hasta tener tu CV publicado.</p>
+  </div>
+  <div class="franja-pasos">
+    <div class="paso-mini"><div class="num">01</div><h4>Creá tu cuenta</h4><p>Con tu email, en menos de un minuto.</p></div>
+    <div class="paso-mini"><div class="num">02</div><h4>Completá tu CV</h4><p>Datos, experiencia, estudios y habilidades.</p></div>
+    <div class="paso-mini"><div class="num">03</div><h4>Elegí tu plan</h4><p>Suscripción mensual o anual, cuando quieras.</p></div>
+    <div class="paso-mini"><div class="num">04</div><h4>Publicá y compartí</h4><p>Tu enlace queda activo para ver e imprimir.</p></div>
+  </div>
+  <div class="cta-modal-wrap">
+    <button class="btn btn-primario btn-grande" onclick="abrirModal()">Ver el paso a paso completo</button>
+  </div>
+</section>
+
+<section id="precios">
+  <div class="encabezado-seccion">
+    <h2>Un plan simple</h2>
+    <p>Sin letra chica. Cancelás cuando quieras, tu CV queda guardado igual.</p>
+  </div>
+  <div class="grilla-precios">
+    <div class="tarjeta-precio">
+      <h3>Mensual</h3>
+      <div class="precio-monto">$2.500<span>/mes</span></div>
+      <p class="precio-ahorro precio-neutro">Sin permanencia · cancelás cuando quieras</p>
+      <ul class="lista-precio">
+        <li><span class="check-precio">✓</span> Editor de CV completo</li>
+        <li><span class="check-precio">✓</span> Foto de perfil</li>
+        <li><span class="check-precio">✓</span> Enlace público para compartir</li>
+        <li><span class="check-precio">✓</span> Impresión y PDF</li>
+      </ul>
+      <button class="btn btn-fantasma" onclick="abrirApp('editor')">Elegir mensual</button>
+    </div>
+    <div class="tarjeta-precio destacada">
+      <span class="etiqueta-recomendado">Más elegido</span>
+      <h3>Anual</h3>
+      <div class="precio-monto">$21.000<span>/año</span></div>
+      <p class="precio-equivalente">Equivale a $1.750/mes · pago único</p>
+      <p class="precio-ahorro">Ahorrás 30% frente al mensual</p>
+      <ul class="lista-precio">
+        <li><span class="check-precio">✓</span> Editor de CV completo</li>
+        <li><span class="check-precio">✓</span> Foto de perfil</li>
+        <li><span class="check-precio">✓</span> Enlace público para compartir</li>
+        <li><span class="check-precio">✓</span> Impresión y PDF</li>
+      </ul>
+      <button class="btn btn-dorado" onclick="abrirApp('editor')">Elegir anual</button>
+    </div>
+  </div>
+</section>
+
+<section id="opiniones" style="background:var(--surface-2);">
+  <div class="encabezado-seccion">
+    <h2>Lo que dicen quienes ya lo usan</h2>
+  </div>
+  <div class="grilla-opiniones">
+    <div class="tarjeta-opinion">
+      <div class="estrellas">★★★★★</div>
+      <p class="cita">Armé mi CV desde el celular en el colectivo. Al toque tenía el enlace para mandarlo a la entrevista.</p>
+      <div class="autor-opinion">
+        <span class="avatar-opinion" style="background:#E8A33D;"></span>
+        <div><div class="nombre">Marina Sosa</div><div class="rol">Diseñadora</div></div>
+      </div>
+    </div>
+    <div class="tarjeta-opinion">
+      <div class="estrellas">★★★★★</div>
+      <p class="cita">Lo que más uso es imprimirlo directo desde el enlace, sin tener que abrir Word cada vez que cambio algo.</p>
+      <div class="autor-opinion">
+        <span class="avatar-opinion" style="background:#1F3A5F;"></span>
+        <div><div class="nombre">Julián Peralta</div><div class="rol">Técnico en sistemas</div></div>
+      </div>
+    </div>
+    <div class="tarjeta-opinion">
+      <div class="estrellas">★★★★★</div>
+      <p class="cita">Se ve mucho más prolijo que las plantillas que bajaba antes. Y el enlace no vence si mantengo la suscripción.</p>
+      <div class="autor-opinion">
+        <span class="avatar-opinion" style="background:#3FB27F;"></span>
+        <div><div class="nombre">Adriana Bustos</div><div class="rol">Encargada de área</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="encabezado-seccion">
+    <h2>Preguntas frecuentes</h2>
+  </div>
+  <div class="lista-faq">
+    <div class="item-faq">
+      <button class="pregunta-faq" onclick="toggleFaq(this)">¿Necesito instalar algo?<span class="signo">+</span></button>
+      <div class="respuesta-faq">No, todo funciona desde el navegador, tanto en celular como en PC. Solo necesitás tu cuenta de Google.</div>
+    </div>
+    <div class="item-faq">
+      <button class="pregunta-faq" onclick="toggleFaq(this)">¿Puedo cambiar mis datos después de publicar?<span class="signo">+</span></button>
+      <div class="respuesta-faq">Sí, en cualquier momento. Los cambios se reflejan al instante en tu enlace público.</div>
+    </div>
+    <div class="item-faq">
+      <button class="pregunta-faq" onclick="toggleFaq(this)">¿Qué pasa si no renuevo la suscripción?<span class="signo">+</span></button>
+      <div class="respuesta-faq">Tu enlace deja de estar disponible públicamente, pero tus datos se guardan. Al reactivar, todo vuelve a estar como lo dejaste.</div>
+    </div>
+    <div class="item-faq">
+      <button class="pregunta-faq" onclick="toggleFaq(this)">¿Puedo imprimirlo sin conexión?<span class="signo">+</span></button>
+      <div class="respuesta-faq">Necesitás conexión para abrir el enlace, pero una vez cargado podés guardarlo como PDF e imprimirlo cuando quieras.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="cta-final">
+    <h2>Tu próximo CV, listo en minutos</h2>
+    <p>Sin diseñador, sin Word, sin vueltas.</p>
+    <button class="btn btn-dorado btn-grande" onclick="abrirApp('editor')">Crear mi CV ahora</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-interior">
+    <div>© 2026 CVs Online</div>
+    <div class="footer-links">
+      <a href="#caracteristicas">Características</a>
+      <a href="#precios">Precios</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#" onclick="abrirApp('dashboard'); return false;">Administración</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Capa de transición antes de navegar al Editor/Dashboard -->
+<div class="capa-transicion" id="capaTransicion">
+  <div class="panel-app-spinner"></div>
+</div>
+
+<!-- Botones flotantes -->
+<button id="btnSubir" class="flotante" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Subir al inicio">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
+
+<button id="btnTema" class="flotante" onclick="alternarTema()" aria-label="Cambiar modo claro/oscuro">
+  <svg id="iconoTema" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+
+<!-- Modal paso a paso -->
+<div class="fondo-modal" id="fondoModal" onclick="cerrarModalFuera(event)">
+  <div class="caja-modal">
+    <button class="cerrar-modal" onclick="cerrarModal()">✕</button>
+    <h3>Cómo funciona</h3>
+    <p class="sub">De cero a tu CV publicado, en cuatro pasos.</p>
+
+    <div class="paso-detalle">
+      <div class="circulo-num">1</div>
+      <div>
+        <h4>Creá tu cuenta</h4>
+        <p>Con tu email y una contraseña propia, en menos de un minuto.</p>
+      </div>
+    </div>
+    <div class="paso-detalle">
+      <div class="circulo-num">2</div>
+      <div>
+        <h4>Completá tu currículum</h4>
+        <p>Datos personales, foto, experiencia, educación y habilidades, todo desde un formulario simple.</p>
+      </div>
+    </div>
+    <div class="paso-detalle">
+      <div class="circulo-num">3</div>
+      <div>
+        <h4>Activá tu suscripción</h4>
+        <p>Elegís plan mensual o anual y confirmás el pago de forma segura.</p>
+      </div>
+    </div>
+    <div class="paso-detalle">
+      <div class="circulo-num">4</div>
+      <div>
+        <h4>Publicá y compartí</h4>
+        <p>Tu enlace queda activo al instante, listo para compartir o imprimir cuando quieras.</p>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <button class="btn btn-dorado btn-grande" onclick="cerrarModal(); abrirApp('editor');">Empezar ahora</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Acceso al Editor / Dashboard (URL de la implementación PRIVADA) ---
+  // Google no permite mostrar sus pantallas de login dentro de un iframe,
+  // así que en vez de embeber, navegamos directo — el diseño compartido
+  // entre esta landing y el Editor/Dashboard mantiene la sensación de continuidad.
+  const URL_APP_PRIVADA = 'https://script.google.com/macros/s/AKfycbz-BFZsjbdwT4U5TtZqPwAX2tpO2x105KIpESCvl1YFQclIHtYQYC9NlAb0nO8l5I0s/exec';
+
+  function abrirApp(tipo) {
+    let url = URL_APP_PRIVADA;
+    if (tipo === 'dashboard') {
+      url += '?page=dashboard';
+    }
+    mostrarTransicionSalida();
+    window.top.location.href = url;
+  }
+
+  function mostrarTransicionSalida() {
+    const capa = document.getElementById('capaTransicion');
+    if (capa) capa.classList.add('visible');
+  }
+
+  // Si el usuario vuelve con el botón "Atrás" del navegador, la página puede
+  // restaurarse desde la caché con la capa de transición todavía visible
+  // (spinner trabado). Esto la oculta siempre que la landing se vuelve a mostrar.
+  window.addEventListener('pageshow', function() {
+    const capa = document.getElementById('capaTransicion');
+    if (capa) capa.classList.remove('visible');
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarModal();
+  });
+
+  // --- Menú móvil ---
+  function alternarMenuMovil() {
+    document.getElementById('navMovil').classList.toggle('abierto');
+    document.getElementById('btnHamburguesa').classList.toggle('abierto');
+  }
+  function cerrarMenuMovil() {
+    document.getElementById('navMovil').classList.remove('abierto');
+    document.getElementById('btnHamburguesa').classList.remove('abierto');
+  }
+
+  // --- Modal ---
+  function abrirModal() {
+    document.getElementById('fondoModal').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarModal() {
+    document.getElementById('fondoModal').classList.remove('abierto');
+    document.body.style.overflow = '';
+  }
+  function cerrarModalFuera(e) {
+    if (e.target.id === 'fondoModal') cerrarModal();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarModal();
+  });
+
+  // --- FAQ acordeón ---
+  function toggleFaq(boton) {
+    const item = boton.parentElement;
+    const yaAbierto = item.classList.contains('abierto');
+    document.querySelectorAll('.item-faq').forEach(el => el.classList.remove('abierto'));
+    if (!yaAbierto) item.classList.add('abierto');
+  }
+
+  // --- Botón subir: aparece al hacer scroll ---
+  const btnSubir = document.getElementById('btnSubir');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) {
+      btnSubir.classList.add('visible');
+    } else {
+      btnSubir.classList.remove('visible');
+    }
+  });
+
+  // --- Modo oscuro / claro, con persistencia ---
+  const iconoSol = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  const iconoLuna = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+
+  function aplicarTema(tema) {
+    if (tema === 'oscuro') {
+      document.documentElement.setAttribute('data-tema', 'oscuro');
+      document.getElementById('iconoTema').innerHTML = iconoLuna;
+    } else {
+      document.documentElement.removeAttribute('data-tema');
+      document.getElementById('iconoTema').innerHTML = iconoSol;
+    }
+  }
+
+  function alternarTema() {
+    const actual = document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'oscuro' : 'claro';
+    const nuevo = actual === 'oscuro' ? 'claro' : 'oscuro';
+    aplicarTema(nuevo);
+    try { localStorage.setItem('cvonline_tema', nuevo); } catch(e) {}
+  }
+
+  (function iniciarTema() {
+    let preferido = 'claro';
+    try {
+      const guardado = localStorage.getItem('cvonline_tema');
+      if (guardado) {
+        preferido = guardado;
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        preferido = 'oscuro';
+      }
+    } catch(e) {}
+    aplicarTema(preferido);
+  })();
+</script>
+
+</body>
+</html>
 
